@@ -1,8 +1,11 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import static java.util.Arrays.asList;
 
 public class Main {
 
@@ -13,7 +16,7 @@ public class Main {
     private static final String ALIVE_PLACEHOLDER = "o";
 
     public static void main(String[] args) {
-        List<List<String>> board = generateEmptyBoard();
+        List<List<String>> board = generateInitialBoard();
 
         printBoard(board);
 
@@ -36,7 +39,7 @@ public class Main {
     }
 
     private static List<List<String>> nextGeneration(List<List<String>> board) {
-        List<List<String>> newBoard = generateEmptyBoard();
+        List<List<String>> newBoard = generateInitialBoard();
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
@@ -57,29 +60,19 @@ public class Main {
         return newBoard;
     }
 
-    private static List<List<String>> generateEmptyBoard() {
-        List<List<String>> board = new ArrayList<>();
-
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            board.add(new ArrayList<>());
-
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                board.get(i).add(DEAD);
-            }
-        }
-
-        board.get(0).set(0, ALIVE);
-        board.get(0).set(1, ALIVE);
-        board.get(1).set(0, ALIVE);
-
-        board.get(3).set(4, ALIVE);
-        board.get(3).set(5, ALIVE);
-        board.get(3).set(6, ALIVE);
-        board.get(4).set(5, ALIVE);
-
-        board.get(BOARD_SIZE - 1).set(6, ALIVE);
-
-        return board;
+    private static List<List<String>> generateInitialBoard() {
+        return asList(
+                asList("◉", "◉", "·", "·", "·", "·", "·", "·", "·", "·"),
+                asList("◉", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
+                asList("·", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
+                asList("·", "·", "·", "·", "◉", "◉", "◉", "·", "·", "·"),
+                asList("·", "·", "·", "·", "·", "◉", "·", "·", "·", "·"),
+                asList("·", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
+                asList("·", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
+                asList("·", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
+                asList("·", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
+                asList("·", "·", "·", "·", "·", "·", "◉", "·", "·", "·")
+        );
     }
 
     private static int getAliveNeighborsCount(List<List<String>> board, int i, int j) {
