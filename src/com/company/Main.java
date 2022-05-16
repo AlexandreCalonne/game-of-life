@@ -2,12 +2,11 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
-    private static final int SIZE = 10;
-    private static final int GENERATIONS_COUNT = 10;
-
+    private static final int BOARD_SIZE = 10;
     private static final String DEAD = "·";
     private static final String ALIVE = "◉";
     private static final String DEAD_PLACEHOLDER = "_";
@@ -18,22 +17,35 @@ public class Main {
 
         printBoard(board);
 
-        for (int i = 0; i < GENERATIONS_COUNT; i++) {
-            board = nextGeneration(board);
+        Scanner userInput = new Scanner(System.in);
+        boolean isContinue = true;
+
+        while (isContinue) {
+            System.out.println("Next generation? (y/n)");
+
+            String input = userInput.nextLine();
+
+            if ("y".equals(input)) {
+                board = nextGeneration(board);
+            } else if ("n".equals(input)) {
+                isContinue = false;
+            } else {
+                System.out.println("Command not found.");
+            }
         }
     }
 
     private static List<List<String>> nextGeneration(List<List<String>> board) {
         List<List<String>> newBoard = generateEmptyBoard();
 
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 newBoard.get(i).set(j, board.get(i).get(j));
                 int aliveNeighborsCount = getAliveNeighborsCount(board, i, j);
 
-                if (DEAD.equals(board.get(i).get(j)) && aliveNeighborsCount == 3) {
+                if (isDead(board, i, j) && aliveNeighborsCount == 3) {
                     newBoard.get(i).set(j, ALIVE_PLACEHOLDER);
-                } else if (ALIVE.equals(board.get(i).get(j)) && (aliveNeighborsCount < 2 || aliveNeighborsCount > 3)) {
+                } else if (isAlive(board, i, j) && (aliveNeighborsCount < 2 || aliveNeighborsCount > 3)) {
                     newBoard.get(i).set(j, DEAD_PLACEHOLDER);
                 }
             }
@@ -48,10 +60,10 @@ public class Main {
     private static List<List<String>> generateEmptyBoard() {
         List<List<String>> board = new ArrayList<>();
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             board.add(new ArrayList<>());
 
-            for (int j = 0; j < SIZE; j++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 board.get(i).add(DEAD);
             }
         }
@@ -65,7 +77,7 @@ public class Main {
         board.get(3).set(6, ALIVE);
         board.get(4).set(5, ALIVE);
 
-        board.get(SIZE - 1).set(6, ALIVE);
+        board.get(BOARD_SIZE - 1).set(6, ALIVE);
 
         return board;
     }
@@ -75,7 +87,10 @@ public class Main {
 
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
-                if (areCoordinatesInsideBoard(i - 1 + x, j - 1 + y) && ALIVE.equals(board.get(i - 1 + x).get(j - 1 + y)) && !(x == 1 && y == 1)) {
+                int neighborX = i - 1 + x;
+                int neighborY = j - 1 + y;
+
+                if (areCoordinatesInsideBoard(neighborX, neighborY) && isAlive(board, neighborX, neighborY) && isNotInitialCell(x, y)) {
                     count++;
                 }
             }
@@ -84,16 +99,28 @@ public class Main {
         return count;
     }
 
+    private static boolean isNotInitialCell(int x, int y) {
+        return !(x == 1 && y == 1);
+    }
+
+    private static boolean isAlive(List<List<String>> board, int newX, int newY) {
+        return ALIVE.equals(board.get(newX).get(newY));
+    }
+
+    private static boolean isDead(List<List<String>> board, int i, int j) {
+        return DEAD.equals(board.get(i).get(j));
+    }
+
     private static boolean areCoordinatesInsideBoard(int i, int j) {
         return i >= 0
             && j >= 0
-            && i < SIZE
-            && j < SIZE;
+            && i < BOARD_SIZE
+            && j < BOARD_SIZE;
     }
 
     private static void printBoard(List<List<String>> board) {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 System.out.print(board.get(i).get(j) + "  ");
             }
             System.out.println();
@@ -102,8 +129,8 @@ public class Main {
     }
 
     private static void replacePlaceholders(List<List<String>> board) {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
                 if (DEAD_PLACEHOLDER.equals(board.get(i).get(j))) {
                     board.get(i).set(j, DEAD);
                 } else if (ALIVE_PLACEHOLDER.equals(board.get(i).get(j))) {
