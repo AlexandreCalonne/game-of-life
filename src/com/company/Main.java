@@ -1,7 +1,5 @@
 package com.company;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -62,7 +60,7 @@ public class Main {
 
     private static List<List<String>> generateInitialBoard() {
         return asList(
-                asList("◉", "◉", "·", "·", "·", "·", "·", "·", "·", "·"),
+                asList("◉", "◉", "·", "·", "·", "·", "·", "·", "·", "◉"),
                 asList("◉", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
                 asList("·", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
                 asList("·", "·", "·", "·", "◉", "◉", "◉", "·", "·", "·"),
@@ -71,7 +69,7 @@ public class Main {
                 asList("·", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
                 asList("·", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
                 asList("·", "·", "·", "·", "·", "·", "·", "·", "·", "·"),
-                asList("·", "·", "·", "·", "·", "·", "◉", "·", "·", "·")
+                asList("◉", "·", "·", "·", "·", "·", "·", "·", "·", "◉")
         );
     }
 
